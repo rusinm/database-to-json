@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="database-to-json">
+    <global-element name="Generic Database Configuration" type="http://www.mulesoft.org/schema/mule/db/generic-config" entity-id="Generic Database Configuration#1">
+        <properties>
+            <property name="dataSource-ref"/>
+            <property name="auxiliary;metauseMetaData" value="true"/>
+            <property name="springBeanConf"/>
+            <property name="name" value="MySQL_Configuration"/>
+            <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+            <property name="useXaTransactions"/>
+            <property name="parameterTable"/>
+            <property name="databaseURLConf"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="url" value="jdbc:mysql://localhost:3306/company?user=generatedata&amp;password=generatedata"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="database-to-jsonFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="246afdde-9f17-403e-bcb4-084a76b3136c">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="2"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="21" y="71" width="68" height="171"/>
+                <properties>
+                    <property name="port" value="8081"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keepAlive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="auxiliary;index" value="3"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="Database" type="http://www.mulesoft.org/schema/mule/db/database-connector" entity-id="Database#1">
+                <graphicalData x="149" y="71" width="68" height="69"/>
+                <properties>
+                    <property name="streaming"/>
+                    <property name=""/>
+                    <property name="fetchSize"/>
+                    <property name="source"/>
+                    <property name="transactionalAction"/>
+                    <property name="target"/>
+                    <property name="maxRows"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/db/select"/>
+                    <property name="config-ref" value="MySQL_Configuration"/>
+                    <property name="auxiliary;index" value="5"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/db/dynamic-query;0">
+                        <property name="text" value="select first_name from employees where last_name = &quot;#[message.inboundProperties['lastname']]&quot;"/>
+                        <property name="auxiliary;index" value="6"/>
+                        <property name="auxiliary;wrapIn" value="6"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <pattern name="Object to JSON" type="http://www.mulesoft.org/schema/mule/json/object-to-json-transformer" entity-id="Object to JSON#1">
+                <graphicalData x="405" y="71" width="94" height="69"/>
+                <properties>
+                    <property name="sourceClass"/>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="8"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+</mule-configuration>
